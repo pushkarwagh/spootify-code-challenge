@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getCategories, getFeaturedPlaylists, getNewReleases } from "./operations";
+import { getToken } from "./operations/operations";
 //axios api
 
 const initialState = {
@@ -18,7 +19,7 @@ export const fetchNewReleasesList = createAsyncThunk(
         try {
             const list = await getNewReleases();
             return list;
-        } catch (err) {
+        } catch (err) {            
             return rejectWithValue([], err);
         }
     }
@@ -63,7 +64,8 @@ const { actions, reducer } = createSlice({
         [fetchNewReleasesList.rejected]: (state, { payload, error }) => {
                 state.newReleaseLoading = false;
                 state.newReleasesList = payload;
-                state.error = error;                
+                state.error = error;    
+
         },
         [fetchFeaturedPlaylistsList.fulfilled]: (state, { payload }) => {
                 state.featuredPlaylistsList = payload;

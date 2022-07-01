@@ -8,9 +8,8 @@ export default async function makeRequest(path, resourceType) {
   const token = localStorage.getItem("token");
   const res = await axios.get(
     `${api.baseUrl}/browse/${path}?locale=en_US`,
-    {  headers: { Authorization: `Bearer ${token}dkld` } }
+    {  headers: { Authorization: `Bearer ${token}` } }
   );
-
   return res.data[resourceType].items;
 }
 
