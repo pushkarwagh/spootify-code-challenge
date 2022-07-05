@@ -15,11 +15,14 @@ const initialState = {
 
 export const fetchNewReleasesList = createAsyncThunk(
     "music/fetchNewReleasesList",
-    async (_, { rejectWithValue }) => {
+    async ( os, { rejectWithValue }) => {
         try {
-            const list = await getNewReleases();
+            const list = await getNewReleases(os);
             return list;
-        } catch (err) {            
+        } catch (err) {
+            if (err.message === "Request failed with status code 401") {
+                getToken();
+            }
             return rejectWithValue([], err);
         }
     }
@@ -32,6 +35,9 @@ export const fetchFeaturedPlaylistsList = createAsyncThunk(
             const list = await getFeaturedPlaylists();
             return list;
         } catch (err) {
+            if (err.message === "Request failed with status code 401") {
+                getToken();
+            }
             return rejectWithValue([], err);
         }
     }
@@ -39,11 +45,14 @@ export const fetchFeaturedPlaylistsList = createAsyncThunk(
 
 export const fetchCategoriesList = createAsyncThunk(
     "music/fetchCategoriesList",
-    async (_, { rejectWithValue }) => {
+    async (os, { rejectWithValue }) => {
         try {
-            const list = await getCategories();
+            const list = await getCategories(os);
             return list;
         } catch (err) {
+            if (err.message === "Request failed with status code 401") {
+                getToken();
+            }
             return rejectWithValue([], err);
         }
     }
@@ -55,41 +64,41 @@ const { actions, reducer } = createSlice({
     reducers: {},
     extraReducers: {
         [fetchNewReleasesList.fulfilled]: (state, { payload }) => {
-            state.newReleasesList=payload;
+            state.newReleasesList = payload;
             state.newReleaseLoading = false;
         },
         [fetchNewReleasesList.pending]: (state) => {
             state.newReleaseLoading = true;
         },
         [fetchNewReleasesList.rejected]: (state, { payload, error }) => {
-                state.newReleaseLoading = false;
-                state.newReleasesList = payload;
-                state.error = error;    
+            state.newReleaseLoading = false;
+            state.newReleasesList = payload;
+            state.error = error;
 
         },
         [fetchFeaturedPlaylistsList.fulfilled]: (state, { payload }) => {
-                state.featuredPlaylistsList = payload;
-                state.featuredListLoading = false;
+            state.featuredPlaylistsList = payload;
+            state.featuredListLoading = false;
         },
         [fetchFeaturedPlaylistsList.pending]: (state) => {
             state.featuredListLoading = true;
         },
         [fetchFeaturedPlaylistsList.rejected]: (state, { payload, error }) => {
-                state.featuredListLoading = false;
-                state.featuredPlaylistsList = payload;
-                state.error = error;
+            state.featuredListLoading = false;
+            state.featuredPlaylistsList = payload;
+            state.error = error;
         },
         [fetchCategoriesList.fulfilled]: (state, { payload }) => {
-                state.categoriesList = payload;
-                state.categoryLoading = false;
+            state.categoriesList = payload;
+            state.categoryLoading = false;
         },
         [fetchCategoriesList.pending]: (state) => {
             state.categoryLoading = true;
         },
         [fetchCategoriesList.rejected]: (state, { payload, error }) => {
-                state.categoryLoading = false;
-                state.categoriesList = payload;
-                state.error = error;
+            state.categoryLoading = false;
+            state.categoriesList = payload;
+            state.error = error;
         },
     },
 });

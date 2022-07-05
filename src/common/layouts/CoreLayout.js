@@ -5,11 +5,11 @@ import Player from '../components/Player';
 import { getToken } from '../../redux/operations/operations';
 
 function CoreLayout({ children , history }) {
-
   useEffect(()=>{
     const token = (getToken())
     token.then(res=> localStorage.setItem("token",res))
   },[]);
+
   return (
     <div className="main">
       <SideBar />

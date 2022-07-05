@@ -4,10 +4,12 @@ import config from '../../config';
 
 const { api } = config;
 
-export default async function makeRequest(path, resourceType) {
+export default async function makeRequest(path, resourceType,os) {
+  const offset = os | 0;
+  const limit = 20;
   const token = localStorage.getItem("token");
   const res = await axios.get(
-    `${api.baseUrl}/browse/${path}?locale=en_US`,
+    `${api.baseUrl}/browse/${path}?locale=en_US&offset=${offset}&limit=${limit}`,
     {  headers: { Authorization: `Bearer ${token}` } }
   );
   return res.data[resourceType].items;
